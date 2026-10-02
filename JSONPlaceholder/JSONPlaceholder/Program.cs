@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using System.Net.Http.Json;
-using System.Text.Json.Serialization;
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 Console.InputEncoding = System.Text.Encoding.UTF8;
@@ -12,7 +11,30 @@ using var http = new HttpClient
 };
 
 int userId = ReadInt("Введите ID пользователя: ");
-Console.WriteLine($"Выбран пользователь {userId}");
+await ShowTodosAsync();
+
+async Task ShowTodosAsync()
+{
+    using var response = await http.GetAsync($"/todos?userId={userId}");
+    response.EnsureSuccessStatusCode();
+
+    List<Todo>? todos = await response.Content.ReadFromJsonAsync<List<Todo>>();
+    if (todos is null || todos.Count == 0)
+    {
+        Console.WriteLine("У пользователя нет задач.");
+        return;
+    }
+
+    Console.WriteLine($"Задачи пользователя {userId}:");
+    foreach (var t in todos) PrintTodo(t);
+}
+
+void PrintTodo(Todo t)
+{
+    string status = t.Completed ? "выполнена" : "не выполнена";
+    Console.WriteLine($"[{t.Id}] {t.Title} — {status}");
+}
+await ShowTodosAsync();
 
 int ReadInt(string prompt)
 {
@@ -23,6 +45,7 @@ int ReadInt(string prompt)
         Console.WriteLine("Введите положительное целое число.");
     }
 }
+
 Console.WriteLine("Todo App");
 
 public class Todo
