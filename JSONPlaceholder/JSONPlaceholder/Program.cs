@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using System.Net.Http.Json;
+using System.Text.Json.Serialization;
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 Console.InputEncoding = System.Text.Encoding.UTF8;
@@ -22,7 +23,6 @@ int ReadInt(string prompt)
         Console.WriteLine("Введите положительное целое число.");
     }
 }
-
 Console.WriteLine("Todo App");
 
 public class Todo
