@@ -1,4 +1,27 @@
 ﻿using System.Text.Json.Serialization;
+using System.Net.Http.Json;
+
+Console.OutputEncoding = System.Text.Encoding.UTF8;
+Console.InputEncoding = System.Text.Encoding.UTF8;
+
+using var http = new HttpClient
+{
+    BaseAddress = new Uri("https://jsonplaceholder.typicode.com"),
+    Timeout = TimeSpan.FromSeconds(15)
+};
+
+int userId = ReadInt("Введите ID пользователя: ");
+Console.WriteLine($"Выбран пользователь {userId}");
+
+int ReadInt(string prompt)
+{
+    while (true)
+    {
+        Console.Write(prompt);
+        if (int.TryParse(Console.ReadLine(), out int value) && value > 0) return value;
+        Console.WriteLine("Введите положительное целое число.");
+    }
+}
 
 Console.WriteLine("Todo App");
 
