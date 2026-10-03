@@ -34,7 +34,27 @@ void PrintTodo(Todo t)
     string status = t.Completed ? "выполнена" : "не выполнена";
     Console.WriteLine($"[{t.Id}] {t.Title} — {status}");
 }
-await ShowTodosAsync();
+while (true)
+{
+    Console.WriteLine();
+    Console.WriteLine("1. Показать задачи пользователя");
+    Console.WriteLine("2. Найти задачу по ID");
+    Console.WriteLine("3. Создать задачу");
+    Console.WriteLine("4. Изменить статус задачи");
+    Console.WriteLine("5. Удалить задачу");
+    Console.WriteLine("0. Выход");
+    Console.WriteLine();
+    Console.Write("Выберите действие: ");
+
+    string? choice = Console.ReadLine()?.Trim();
+    if (choice == "0") break;
+
+    switch (choice)
+    {
+        case "1": await ShowTodosAsync(); break;
+        default: Console.WriteLine("Неверный пункт меню."); break;
+    }
+}
 
 int ReadInt(string prompt)
 {
