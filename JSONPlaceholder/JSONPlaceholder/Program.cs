@@ -28,6 +28,16 @@ async Task ShowTodosAsync()
     Console.WriteLine($"Задачи пользователя {userId}:");
     foreach (var t in todos) PrintTodo(t);
 }
+async Task FindTodoAsync()
+{
+    int id = ReadInt("Введите ID задачи: ");
+    using var response = await http.GetAsync($"/todos/{id}");
+    response.EnsureSuccessStatusCode();
+
+    Todo? todo = await response.Content.ReadFromJsonAsync<Todo>();
+    if (todo is null) { Console.WriteLine("Пустой ответ сервера."); return; }
+    PrintTodo(todo);
+}
 
 void PrintTodo(Todo t)
 {
@@ -51,8 +61,12 @@ while (true)
 
     switch (choice)
     {
-        case "1": await ShowTodosAsync(); break;
-        default: Console.WriteLine("Неверный пункт меню."); break;
+        case "1": await ShowTodosAsync(); 
+            break;
+        default: Console.WriteLine("Неверный пункт меню."); 
+            break;
+        case "2": await FindTodoAsync(); 
+            break;
     }
 }
 
