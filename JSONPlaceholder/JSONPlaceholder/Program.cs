@@ -57,6 +57,35 @@ async Task CreateTodoAsync()
     Console.WriteLine("Задача создана (сервер имитирует создание):");
     if (created is not null) PrintTodo(created);
 }
+async Task UpdateStatusAsync()
+{
+    int id = ReadInt("Введите ID задачи: ");
+    bool completed = ReadBool("Задача выполнена? (y/n): ");
+
+    // В System.Net.Http.Json нет PatchAsJsonAsync, поэтому собираем запрос вручную
+    using var request = new HttpRequestMessage(HttpMethod.Patch, $"/todos/{id}")
+    {
+        Content = JsonContent.Create(new { completed })
+    };
+
+    using var response = await http.SendAsync(request);
+    response.EnsureSuccessStatusCode();
+
+    Todo? updated = await response.Content.ReadFromJsonAsync<Todo>();
+    Console.WriteLine("Статус изменён:");
+    if (updated is not null) PrintTodo(updated);
+}
+bool ReadBool(string prompt)
+{
+    while (true)
+    {
+        Console.Write(prompt);
+        string s = (Console.ReadLine() ?? "").Trim().ToLower();
+        if (s is "y" or "д" or "да" or "1" or "true") return true;
+        if (s is "n" or "н" or "нет" or "0" or "false") return false;
+        Console.WriteLine("Введите y или n.");
+    }
+}
 void PrintTodo(Todo t)
 {
     string status = t.Completed ? "выполнена" : "не выполнена";
@@ -86,6 +115,8 @@ while (true)
         case "2": await FindTodoAsync(); 
             break;
         case "3": await CreateTodoAsync(); 
+            break;
+        case "4": await UpdateStatusAsync();
             break;
     }
 }
