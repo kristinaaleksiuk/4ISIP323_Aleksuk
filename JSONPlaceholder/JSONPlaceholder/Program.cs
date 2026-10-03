@@ -16,7 +16,7 @@ await ShowTodosAsync();
 async Task ShowTodosAsync()
 {
     using var response = await http.GetAsync($"/todos?userId={userId}");
-    response.EnsureSuccessStatusCode();
+    if (!await CheckAsync(response)) return;
 
     List<Todo>? todos = await response.Content.ReadFromJsonAsync<List<Todo>>();
     if (todos is null || todos.Count == 0)
@@ -32,7 +32,7 @@ async Task FindTodoAsync()
 {
     int id = ReadInt("Введите ID задачи: ");
     using var response = await http.GetAsync($"/todos/{id}");
-    response.EnsureSuccessStatusCode();
+    if (!await CheckAsync(response)) return;
 
     Todo? todo = await response.Content.ReadFromJsonAsync<Todo>();
     if (todo is null) { Console.WriteLine("Пустой ответ сервера."); return; }
@@ -51,7 +51,7 @@ async Task CreateTodoAsync()
     var newTodo = new Todo { UserId = userId, Title = title, Completed = false };
 
     using var response = await http.PostAsJsonAsync("/todos", newTodo);
-    response.EnsureSuccessStatusCode();
+    if (!await CheckAsync(response)) return;
 
     Todo? created = await response.Content.ReadFromJsonAsync<Todo>();
     Console.WriteLine("Задача создана (сервер имитирует создание):");
@@ -69,7 +69,7 @@ async Task UpdateStatusAsync()
     };
 
     using var response = await http.SendAsync(request);
-    response.EnsureSuccessStatusCode();
+    if (!await CheckAsync(response)) return;
 
     Todo? updated = await response.Content.ReadFromJsonAsync<Todo>();
     Console.WriteLine("Статус изменён:");
@@ -79,9 +79,25 @@ async Task DeleteTodoAsync()
 {
     int id = ReadInt("Введите ID задачи: ");
     using var response = await http.DeleteAsync($"/todos/{id}");
-    response.EnsureSuccessStatusCode();
+    if (!await CheckAsync(response)) return;
 
     Console.WriteLine($"Задача {id} удалена (сервер имитирует удаление).");
+}
+async Task<bool> CheckAsync(HttpResponseMessage response)
+{
+    if (response.IsSuccessStatusCode) return true;
+
+    int code = (int)response.StatusCode;
+    string message = code switch
+    {
+        404 => "Ресурс не найден.",
+        400 => "Некорректный запрос.",
+        >= 500 => "Ошибка на стороне сервера.",
+        _ => "Запрос не выполнен."
+    };
+    Console.WriteLine($"Ошибка {code} ({response.ReasonPhrase}): {message}");
+    await Task.CompletedTask;
+    return false;
 }
 bool ReadBool(string prompt)
 {
