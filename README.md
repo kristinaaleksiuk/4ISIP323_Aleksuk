@@ -1,20 +1,20 @@
-##JSONPlaceholder Todo App
+## JSONPlaceholder Todo App
 
-##Консольное приложение на C# для работы со списком задач пользователей через публичный API JSONPlaceholder.
+## Консольное приложение на C# для работы со списком задач пользователей через публичный API JSONPlaceholder.
 
-###Получение списка задач пользователя по его ID (GET /todos?userId={id})
-###Поиск задачи по ID (GET /todos/{id})
-###Создание новой задачи (POST /todos)
-###Изменение статуса задачи (PATCH /todos/{id})
-###Удаление задачи (DELETE /todos/{id})
-###Обработка неуспешных HTTP-ответов и сетевых ошибок
+### Получение списка задач пользователя по его ID (GET /todos?userId={id})
+### Поиск задачи по ID (GET /todos/{id})
+### Создание новой задачи (POST /todos)
+### Изменение статуса задачи (PATCH /todos/{id})
+### Удаление задачи (DELETE /todos/{id})
+### Обработка неуспешных HTTP-ответов и сетевых ошибок
 
-###JSONPlaceholder только имитирует изменение данных. Запросы POST, PATCH и DELETE возвращают корректные ответы, но изменения на сервере не сохраняются.
+### JSONPlaceholder только имитирует изменение данных. Запросы POST, PATCH и DELETE возвращают корректные ответы, но изменения на сервере не сохраняются.
 
-###C# / .NET 8 или новее
-###HttpClient
-###System.Net.Http.Json для работы с JSON
-###async/await для сетевых запросов
+### C# / .NET 8 или новее
+### HttpClient
+### System.Net.Http.Json для работы с JSON
+### async/await для сетевых запросов
 <img width="604" height="1008" alt="image" src="https://github.com/user-attachments/assets/de6d6845-e259-49d2-8354-1ef5d9500720" />
 
 <img width="349" height="589" alt="image" src="https://github.com/user-attachments/assets/a9a9bea9-2727-4327-bd0a-addd4a023e5b" />
