@@ -15,6 +15,15 @@
 ### HttpClient
 ### System.Net.Http.Json для работы с JSON
 ### async/await для сетевых запросов
+
+Пункт	| Действие |Что вводить
+1	| Вывод ID, названия и статуса всех задач пользователя |	—
+2	| Поиск одной задачи | ID задачи
+3	| Создание задачи для текущего пользователя |	Название
+4	| Изменение | статуса	ID задачи и y/n
+5	| Удаление | задачи	ID задачи
+0	| Выход|	—
+
 <img width="604" height="1008" alt="image" src="https://github.com/user-attachments/assets/de6d6845-e259-49d2-8354-1ef5d9500720" />
 
 <img width="349" height="589" alt="image" src="https://github.com/user-attachments/assets/a9a9bea9-2727-4327-bd0a-addd4a023e5b" />
