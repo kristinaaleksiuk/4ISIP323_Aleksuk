@@ -38,7 +38,25 @@ async Task FindTodoAsync()
     if (todo is null) { Console.WriteLine("Пустой ответ сервера."); return; }
     PrintTodo(todo);
 }
+async Task CreateTodoAsync()
+{
+    Console.Write("Введите название задачи: ");
+    string title = Console.ReadLine()?.Trim() ?? "";
+    if (title.Length == 0)
+    {
+        Console.WriteLine("Название не может быть пустым.");
+        return;
+    }
 
+    var newTodo = new Todo { UserId = userId, Title = title, Completed = false };
+
+    using var response = await http.PostAsJsonAsync("/todos", newTodo);
+    response.EnsureSuccessStatusCode();
+
+    Todo? created = await response.Content.ReadFromJsonAsync<Todo>();
+    Console.WriteLine("Задача создана (сервер имитирует создание):");
+    if (created is not null) PrintTodo(created);
+}
 void PrintTodo(Todo t)
 {
     string status = t.Completed ? "выполнена" : "не выполнена";
@@ -67,9 +85,10 @@ while (true)
             break;
         case "2": await FindTodoAsync(); 
             break;
+        case "3": await CreateTodoAsync(); 
+            break;
     }
 }
-
 int ReadInt(string prompt)
 {
     while (true)
@@ -79,9 +98,7 @@ int ReadInt(string prompt)
         Console.WriteLine("Введите положительное целое число.");
     }
 }
-
 Console.WriteLine("Todo App");
-
 public class Todo
 {
     [JsonPropertyName("userId")]
