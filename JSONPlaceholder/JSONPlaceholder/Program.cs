@@ -57,6 +57,14 @@ async Task CreateTodoAsync()
     Console.WriteLine("Задача создана (сервер имитирует создание):");
     if (created is not null) PrintTodo(created);
 }
+async Task DeleteTodoAsync()
+{
+    int id = ReadInt("Введите ID задачи: ");
+    using var response = await http.DeleteAsync($"/todos/{id}");
+    response.EnsureSuccessStatusCode();
+
+    Console.WriteLine($"Задача {id} удалена (сервер имитирует удаление).");
+}
 async Task UpdateStatusAsync()
 {
     int id = ReadInt("Введите ID задачи: ");
@@ -117,6 +125,8 @@ while (true)
         case "3": await CreateTodoAsync(); 
             break;
         case "4": await UpdateStatusAsync();
+            break;
+        case "5": await DeleteTodoAsync();
             break;
     }
 }
